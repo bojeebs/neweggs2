@@ -27,6 +27,7 @@ class ShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shopping_carts', null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='shopping_carts')
     price = models.DecimalField(max_digits=8, decimal_places= 2, default=0)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return f'Shopping cart for customer {self.user} containing product {self.product}'

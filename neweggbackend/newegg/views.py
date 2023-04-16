@@ -30,7 +30,10 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
+class UserDetail(generics.RetrieveAPIView):
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk)
+        return HttpResponse(f'User: {user.name}')
 
 
 class ProductList(generics.ListCreateAPIView):
@@ -90,4 +93,14 @@ class OrderDetailsView(View):
             'price_total': price_total,
         }
         return JsonResponse(data)
-# Create your views here.
+
+
+class CartUpdate(generics.UpdateAPIView):
+    queryset = ShoppingCart.objects.all()
+    serializer_class = ShoppingCartSerializer
+
+    def put(self, request, *args, **kwargs):
+        cart_item = self.get_object()
+        cart_item.quantity = request.data.get('quantity')
+        cart_item.save()
+        return self.update(request, *args, **kwargs)
